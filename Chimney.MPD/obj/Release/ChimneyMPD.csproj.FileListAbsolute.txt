@@ -1,0 +1,16 @@
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Release\ChimneyMPD.dll
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Release\ChimneyMPD.pdb
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Release\ChimneyMPD.pri
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\ChimneyMPD.dll
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\ChimneyMPD.pdb
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\priconfig.xml
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\priconfig.xml.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\layout.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\layout.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\resources.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\resources.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\pri.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\pri.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\qualifiers.txt
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\qualifiers.txt.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Release\MultipleQualifiersPerDimensionFound.txt

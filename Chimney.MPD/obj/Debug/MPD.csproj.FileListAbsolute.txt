@@ -1,0 +1,17 @@
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\MPD.csprojResolveAssemblyReference.cache
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Debug\ChimneyMPD.dll
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Debug\ChimneyMPD.pdb
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\bin\Debug\ChimneyMPD.pri
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\ChimneyMPD.dll
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\ChimneyMPD.pdb
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\priconfig.xml
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\priconfig.xml.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\layout.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\layout.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\resources.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\resources.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\pri.resfiles
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\pri.resfiles.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\qualifiers.txt
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\qualifiers.txt.intermediate
+C:\Users\ejevi_000\Documents\Visual Studio 2013\Projects\Chimney\ChimneyMPD\obj\Debug\MultipleQualifiersPerDimensionFound.txt
