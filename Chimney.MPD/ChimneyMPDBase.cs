@@ -30,6 +30,7 @@ namespace Chimney.MPD
         public delegate void EventHandler(object sender, EventArgs e);
         public event EventHandler ConnectionProblem;
         public event EventHandler ConnectionConnected;
+        public event EventHandler CouldNotConnect;
 
         private Chimney.MPD.Net.Connection _connection;
 
@@ -201,24 +202,29 @@ namespace Chimney.MPD
 
         public async Task NoIdle()
         {
-            await Send(MPDKeyWords.Send.Encode( MPDKeyWords.Client.Status.NOIDLE ), false, true, false);
-            this.idle = false;
+            await Connection.Send(_connection.Socket,
+                    MPDKeyWords.Send.Encode(MPDKeyWords.Client.Status.NOIDLE));
+            //await Send(MPDKeyWords.Send.Encode( MPDKeyWords.Client.Status.NOIDLE ), false, true, false);
+
+            idle = false;
         }
 
-        public async Task<bool> Close(bool connectionproblem = false, bool silent = true)
+        public async Task<bool> Close(bool connectionproblem = false)
         {
-            Debug.WriteLine(this.name + " : CLOSE");
+            Debug.WriteLine(name + " : CLOSE");
 
-            this.queueInUse = this.idle = this.runQue = false;
+            queueInUse = idle = runQue = false;
 
-            this.sendQueue.Clear();
-            this.responseDictionary.Clear();
+            sendQueue.Clear();
+            responseDictionary.Clear();
 
             this.connectionproblem = connectionproblem;
 
-            if (this._connection != null && !this.connectionproblem)
-                await Send( MPDKeyWords.Send.Encode( MPDKeyWords.Client.Connection.CLOSE), false, true, false);
-            
+            if (_connection != null && !this.connectionproblem)
+                //await Send( MPDKeyWords.Send.Encode( MPDKeyWords.Client.Connection.CLOSE), false, true, false);
+                await Connection.Send(_connection.Socket,
+                    MPDKeyWords.Send.Encode(MPDKeyWords.Client.Connection.CLOSE));
+
             Connected = Connecting = false;
 
             return true;
@@ -241,9 +247,9 @@ namespace Chimney.MPD
             return suc;
         }
 
-        public async Task<bool> Disconnect(bool silent = false)
+        public async Task<bool> Disconnect()
         {
-            return await Close(false, silent);
+            return await Close(false);
         }
 
         //
@@ -306,7 +312,6 @@ namespace Chimney.MPD
                 }
 
                 Debug.WriteLine(this.name + " : NEW CONNECTION : PERMISSION : " + success);
-
             }
 
             if (!success)
@@ -314,6 +319,9 @@ namespace Chimney.MPD
                 Connected = false;
                 Connecting = false;
                 _connection.Close();
+
+                if (CouldNotConnect != null)
+                    CouldNotConnect(this, new EventArgs());
             }
             else if (success && !silent)
             {
@@ -393,7 +401,7 @@ namespace Chimney.MPD
                             if ((!suc || !readsuc) && attemps > 0 && queueJob.wait)
                             {
                                 Debug.WriteLine(this.name + " : RECONNECT");
-                                await Connect(this.host, this.port, this.password);
+                                await Connect(this.host, this.port, this.password, true);
                                 suc = false;
                                 //attemps--;
 

@@ -89,49 +89,57 @@ namespace Chimney.MPD.Net
         public static async Task<string> Recive(StreamSocket streamSocket, List<string> orstarts, List<string> orends, List<string> andstarts, List<string> andends)
         {
             string returnString = string.Empty;
-            
-            using (var dataReader = new DataReader(streamSocket.InputStream))
+
+            try
             {
-                dataReader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-                dataReader.InputStreamOptions = InputStreamOptions.Partial;
-
-                var end = false;
-
-                while (!end && await dataReader.LoadAsync(64000) != 0)
+                using (var dataReader = new DataReader(streamSocket.InputStream))
                 {
-                    string readString;
-                    var buffer = dataReader.ReadBuffer(dataReader.UnconsumedBufferLength);
-                    using (var dr = DataReader.FromBuffer(buffer))
-                    {
-                        var bytes1251 = new Byte[buffer.Length];
-                        dr.ReadBytes(bytes1251);
+                    dataReader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+                    dataReader.InputStreamOptions = InputStreamOptions.Partial;
 
-                        readString = Encoding.GetEncoding("UTF-8").GetString(bytes1251, 0, bytes1251.Length);
+                    var end = false;
+
+                    while (!end && await dataReader.LoadAsync(64000) != 0)
+                    {
+                        string readString;
+                        var buffer = dataReader.ReadBuffer(dataReader.UnconsumedBufferLength);
+                        using (var dr = DataReader.FromBuffer(buffer))
+                        {
+                            var bytes1251 = new Byte[buffer.Length];
+                            dr.ReadBytes(bytes1251);
+
+                            readString = Encoding.GetEncoding("UTF-8").GetString(bytes1251, 0, bytes1251.Length);
+                        }
+
+                        if (!string.IsNullOrEmpty(readString))
+                            returnString += readString;
+
+                        if (readString == null)
+                        {
+                            end = true;
+                        }
+                        else if (orstarts.FirstOrDefault(o => returnString.StartsWith(o)) != null)
+                        {
+                            end = true;
+                        }
+                        else if (orends.FirstOrDefault(o => returnString.EndsWith(o)) != null)
+                        {
+                            end = true;
+                        }
+                        else if (andstarts.FirstOrDefault(o => returnString.StartsWith(o)) != null
+                                && andends.FirstOrDefault(o => returnString.EndsWith(o)) != null)
+                        {
+                            end = true;
+                        }
                     }
 
-                    if (!string.IsNullOrEmpty(readString))
-                        returnString += readString;
-
-                    if (readString == null)
-                    {
-                        end = true;
-                    }
-                    else if (orstarts.FirstOrDefault(o => returnString.StartsWith(o)) != null)
-                    {
-                        end = true;
-                    }
-                    else if (orends.FirstOrDefault(o => returnString.EndsWith(o)) != null)
-                    {
-                        end = true;
-                    }
-                    else if (andstarts.FirstOrDefault(o => returnString.StartsWith(o)) != null
-                            && andends.FirstOrDefault(o => returnString.EndsWith(o)) != null)
-                    {
-                        end = true;
-                    }
+                    dataReader.DetachStream();
                 }
-
-                dataReader.DetachStream();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                returnString = string.Empty;
             }
 
             return returnString;
@@ -144,18 +152,25 @@ namespace Chimney.MPD.Net
             var bytearray = Encoding.GetEncoding("UTF-8").GetBytes(send);
             
             var success = true;
-
-            using (var dataWriter = new DataWriter(streamSocket.OutputStream))
+            try
             {
-                dataWriter.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+                using (var dataWriter = new DataWriter(streamSocket.OutputStream))
+                {
+                    dataWriter.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
-                dataWriter.WriteBytes(bytearray);
+                    dataWriter.WriteBytes(bytearray);
 
-                await dataWriter.StoreAsync();
+                    await dataWriter.StoreAsync();
 
-                await dataWriter.FlushAsync();
+                    await dataWriter.FlushAsync();
 
-                dataWriter.DetachStream();
+                    dataWriter.DetachStream();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                success = false;
             }
 
             return success;

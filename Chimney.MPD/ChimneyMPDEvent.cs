@@ -100,7 +100,6 @@ namespace Chimney.MPD
 
     public class ChimneyMPDEvent : ChimneyMPDClient
     {
-        public delegate void EventHandler(object sender, EventArgs e);
         public delegate void PlaylistEventHandler(object sender, PlaylistEventArgs e);
         public delegate void StatusEventHandler(object sender, StatusEventArgs e);
         public delegate void PlayerEventHandler(object sender, PlayerEventArgs e);
@@ -134,8 +133,9 @@ namespace Chimney.MPD
 
         public async Task<bool> RefreshConnection(Status status = null)
         {
-            idle = false;
-            bool suc = await Start(status, true);
+            //idle = false;
+            await Stop();
+            bool suc = await Start(status, false);
             return suc;
         }
 
@@ -257,7 +257,7 @@ namespace Chimney.MPD
                 }
                 else if (attemps > 0 && idle)
                 {
-                    await Connect(this.host, this.port, this.password, true);
+                    await Connect(this.host, this.port, this.password, false);
                     attemps--;
                 }
                 else if(idle)
