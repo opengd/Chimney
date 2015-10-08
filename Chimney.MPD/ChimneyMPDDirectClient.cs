@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Chimney.MPD.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace Chimney.MPD
 {
-    
+    /*
     public class ChimneyMPDDirectClient : ChimneyMPDBase
     {
 
@@ -838,4 +840,5 @@ namespace Chimney.MPD
  
        
     }
+    */
 }

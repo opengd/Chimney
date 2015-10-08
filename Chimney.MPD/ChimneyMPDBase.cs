@@ -336,7 +336,58 @@ namespace Chimney.MPD
 
             return success;
         }
-        
+
+        public async Task<Tuple<bool, bool>> TestConnect(string host, string port, string password = null, bool silent = false, int timeout = 0)
+        {
+            this.host = host;
+            this.port = port;
+            this.password = password;
+
+            if (_connection != null)
+            {
+                _connection.Close();
+                Debug.WriteLine(this.name + " : CLOSE CONNECTION");
+            }
+
+            _connection = new Connection();
+
+            var permission = true;
+
+            bool success = await _connection.Connect(host, port, timeout);
+
+            Debug.WriteLine(this.name + " : NEW CONNECTION : " + success);
+
+            if (success)
+            {
+                var response = await Connection.Recive(_connection.Socket,
+                    new List<string>() { MPDKeyWords.Response.SUCCESS_CONNECT },
+                    new List<string>() { MPDKeyWords.Response.OK + MPDKeyWords.Response.LINEBREAK },
+                    new List<string>() { MPDKeyWords.Response.ACK },
+                    new List<string>() { MPDKeyWords.Response.LINEBREAK });
+
+                if (string.IsNullOrEmpty(response) || !response.StartsWith(MPDKeyWords.Response.SUCCESS_CONNECT))
+                    success = false;
+
+                Debug.WriteLine(this.name + " : NEW CONNECTION : RESPONSE : " + success);
+
+                if (success)
+                {
+                    await Password(password, false);
+
+                    if (await TestPermission() == null)
+                        permission = false;
+                }
+
+                Debug.WriteLine(this.name + " : NEW CONNECTION : PERMISSION : " + permission);
+            }
+
+            _connection.Close();
+
+            Debug.WriteLine(this.name + " : NEW CONNECTION : RETURN : " + success + " " + permission);
+
+            return new Tuple<bool, bool>(success, permission);
+        }
+
         // Send and recive data to MPD server
         //
         private async Task RunQueue()

@@ -182,6 +182,15 @@ namespace Chimney.MPD
                : false;
         }
 
+        public async Task<bool> PrioRange(int from, int to, int prio)
+        {
+            int qId = await Send(MPDKeyWords.Client.Playlist.PRIO,
+                new List<string>() { prio.ToString(), from.ToString() + ":" + to.ToString() });
+            return ((await Response(qId)).Equals(MPDKeyWords.Response.OK_LINEBREAK))
+               ? true
+               : false;
+        }
+
         public async Task<bool> UpdateDb(string URI = "")
         {
             int qId = await Send(MPDKeyWords.Client.Database.UPDATE,
@@ -467,7 +476,7 @@ namespace Chimney.MPD
                : false;
         }
 
-        public async Task<bool> RemoveFromPlaylist(int id)
+        public async Task<bool> RemoveIdFromPlaylist(int id)
         {
             int qId = await Send(MPDKeyWords.Client.Playlist.DELETEID,
                 new List<string>() { id.ToString() });
@@ -476,10 +485,19 @@ namespace Chimney.MPD
                : false;
         }
 
-        public async Task<bool> RemoveFromPlaylist(int id, string playlistname)
+        public async Task<bool> RemoveFromPlaylist(int position)
+        {
+            int qId = await Send(MPDKeyWords.Client.Playlist.DELETE,
+                new List<string>() { position.ToString() });
+            return ((await Response(qId)).Equals(MPDKeyWords.Response.OK_LINEBREAK))
+               ? true
+               : false;
+        }
+
+        public async Task<bool> RemoveFromPlaylist(int position, string playlistname)
         {
             int qId = await Send(MPDKeyWords.Client.StoredPlaylist.PLAYLISTDELETE,
-                new List<string>() { id.ToString() },
+                new List<string>() { position.ToString() },
                 new List<string>() { playlistname },                
                 true);
             return ((await Response(qId)).Equals(MPDKeyWords.Response.OK_LINEBREAK))
@@ -498,7 +516,7 @@ namespace Chimney.MPD
 
         public async Task<bool> SeekId(int time, int id)
         {
-            int qId = await Send(MPDKeyWords.Client.Playback.SEEKCUR,
+            int qId = await Send(MPDKeyWords.Client.Playback.SEEKID,
                 new List<string>() { id.ToString(), time.ToString() });
             return ((await Response(qId)).Equals(MPDKeyWords.Response.OK_LINEBREAK))
                ? true
@@ -544,7 +562,7 @@ namespace Chimney.MPD
                     new List<string>() { playlist, type, searchstring })
                 : await Send(MPDKeyWords.Client.Database.SEARCHADD,
                     new List<string>(),
-                    new List<string>() { playlist, type, searchstring });
+                    new List<string>() { type, searchstring });
 
             return ((await Response(qId)).Equals(MPDKeyWords.Response.OK_LINEBREAK))
                ? true

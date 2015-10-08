@@ -16,6 +16,7 @@ namespace Chimney.MPD.Classes
         public bool IsEmpty
         {
             get { return this._isEmpty; }
+            set { _isEmpty = value; }
         }
 
         public int Hash
@@ -240,7 +241,10 @@ namespace Chimney.MPD.Classes
             }
         }
         public int Id = -1;
-        public int Prio = -1;
+        public int Prio
+        {
+            get; set;
+        }
 
         public List<KeyValuePair<string, string>> SourceList { get; set; }
 
@@ -304,89 +308,6 @@ namespace Chimney.MPD.Classes
             Init(tagType, keyValuePairList, null);
             this.Pos = Pos;
         }
-
-
-        /*
-        public SongTag(Dictionary<string, string> dictionary, int Pos)
-        {
-            TagType tagType;
-
-            if (dictionary.ContainsKey("file")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.ContainsKey("directory")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.ContainsKey("playlist")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.ContainsKey("Artist")) tagType = TagType.Artist;
-            else if (dictionary.ContainsKey("Album")) tagType = TagType.Album;
-            else if (dictionary.ContainsKey("Genre")) tagType = TagType.Genre;
-            else tagType = TagType.FileOrDirectory;
-
-            Init(tagType, dictionary, null);
-            this.Pos = Pos;
-        }
-        */
-
-        public SongTag(Windows.Storage.ApplicationDataContainer dictionary, int Pos)
-        {
-            TagType tagType;
-
-            if (dictionary.Values.ContainsKey("file")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.Values.ContainsKey("directory")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.Values.ContainsKey("playlist")) tagType = TagType.FileOrDirectory;
-            else if (dictionary.Values.ContainsKey("Artist")) tagType = TagType.Artist;
-            else if (dictionary.Values.ContainsKey("Album")) tagType = TagType.Album;
-            else if (dictionary.Values.ContainsKey("Genre")) tagType = TagType.Genre;
-            else tagType = TagType.FileOrDirectory;
-
-            Init(tagType, dictionary, null);
-            this.Pos = Pos;
-        }
-
-        /*
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary)
-        {
-            Init(tagType, dictionary, null);
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, List<SongTag> playlist)
-        {
-            Init(tagType, dictionary, playlist);
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, int Pos)
-        {
-            Init(tagType, dictionary, null);
-            this.Pos = Pos;
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, int Pos, List<SongTag> playlist)
-        {
-            Init(tagType, dictionary, playlist);
-            this.Pos = Pos;
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, int Pos, string playlistname)
-        {
-            Init(tagType, dictionary, null);
-
-            this.Pos = Pos;
-            this.playlist = playlistname;
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, string playlistname)
-        {
-            Init(tagType, dictionary, null);
-
-            this.playlist = playlistname;
-        }
-
-        public SongTag(TagType tagType, Dictionary<string, string> dictionary, int Pos, List<SongTag> playlist, string playlistname)
-        {
-            Init(tagType, dictionary, playlist);
-
-            this.Pos = Pos;
-            this.playlist = playlistname;
-
-        }
-        */
 
         private void Init(TagType tagType, List<KeyValuePair<string, string>> list, List<SongTag> playlist = null)
         {
@@ -487,217 +408,9 @@ namespace Chimney.MPD.Classes
             }
         }
 
-        /*
-        private void Init(TagType tagType, Dictionary<string, string> dictionary, List<SongTag> playlist = null)
-        {
-            if (dictionary == null) return;
-
-            this.TagType = tagType;
-
-            //this.SourceDictionary = dictionary;
-
-            if (dictionary.Count == 0)
-            {
-                this._isEmpty = true;
-            }
-            else
-            {
-                this._isEmpty = false;
-            }
-
-            bool convsuc = false;
-            int convi = 0;
-
-            foreach (string key in dictionary.Keys)
-            {
-                switch (key)
-                {
-                    case "file":
-                        this.file = dictionary[key];
-                        if (tagType == TagType.FileOrDirectory) this.TagType = TagType.File;
-                        break;
-                    case "directory":
-                        this.directory = dictionary[key];
-                        if (tagType == TagType.FileOrDirectory) this.TagType = TagType.Directory;
-                        break;
-                    case "playlist":
-                        this.playlist = dictionary[key];
-                        this.TagType = TagType.Playlist;
-                        break;
-                    case "Last-Modified":
-                        this.LastModified = dictionary[key];
-                        break;
-                    case "Time":
-                        convsuc = int.TryParse(dictionary[key], out convi);
-                        this.Time = (convsuc) ? convi : 0;
-                        break;
-                    case "Artist":
-                        this.Artist = dictionary[key];
-                        break;
-                    case "Title":
-                        this.Title = dictionary[key];
-                        break;
-                    case "Album":
-                        this.Album = dictionary[key];
-                        break;
-                    case "Date":
-                        this.Date = dictionary[key];
-                        break;
-                    case "Genre":
-                        this.Genre = dictionary[key];
-                        break;
-                    case "Track":
-                        this.Track = dictionary[key];
-                        break;
-                    case "AlbumArtist":
-                        this.AlbumArtist = dictionary[key];
-                        break;
-                    case "Disc":
-                        this.Disc = dictionary[key];
-                        break;
-                    case "Pos":
-                        convsuc = int.TryParse(dictionary[key], out convi);
-                        this.Pos = (convsuc) ? convi : 0;
-                        break;
-                    case "Id":
-                        convsuc = int.TryParse(dictionary[key], out convi);
-                        this.Id = (convsuc) ? convi : 0;
-                        break;
-                    case "Prio":
-                        convsuc = int.TryParse(dictionary[key], out convi);
-                        this.Prio = (convsuc) ? convi : 0;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (playlist != null)
-            {
-                foreach (SongTag st in playlist)
-                {
-                    if (st.file.Equals(this.file))
-                    {
-                        this.Pos = st.Pos;
-                        this.Id = st.Id;
-                    }
-                }
-            }
-
-            if (this.TagType == TagType.File && string.IsNullOrEmpty(this.Title))
-            {
-                string[] s = this.file.Split("/".ToCharArray());
-                if (s.Length > 0) this.Title = s.Last<string>();
-            }
-        }
-        */
-
-        private void Init(TagType tagType, Windows.Storage.ApplicationDataContainer dictionary, List<SongTag> playlist = null)
-        {
-            this.TagType = tagType;
-
-            this.SourceList = new List<KeyValuePair<string, string>>();
-
-            if (dictionary.Values.Count == 0)
-            {
-                this._isEmpty = true;
-            }
-            else
-            {
-                this._isEmpty = false;
-            }
-
-            foreach (string key in dictionary.Values.Keys)
-            {
-                SourceList.Add(new KeyValuePair<string, string>(key, (string)dictionary.Values[key]));
-                switch (key)
-                {
-                    case "file":
-                        this.file = (string)dictionary.Values[key];
-                        if (tagType == TagType.FileOrDirectory) this.TagType = TagType.File;
-                        break;
-                    case "directory":
-                        this.directory = (string)dictionary.Values[key];
-                        if (tagType == TagType.FileOrDirectory) this.TagType = TagType.Directory;
-                        break;
-                    case "playlist":
-                        this.playlist = (string)dictionary.Values[key];
-                        this.TagType = TagType.Playlist;
-                        break;
-                    case "Last-Modified":
-                        this.LastModified = (string)dictionary.Values[key];
-                        break;
-                    case "Time":
-                        this.Time = Convert.ToInt32((string)dictionary.Values[key]);
-                        break;
-                    case "Artist":
-                        this.Artist = (string)dictionary.Values[key];
-                        break;
-                    case "Title":
-                        this.Title = (string)dictionary.Values[key];
-                        break;
-                    case "Album":
-                        this.Album = (string)dictionary.Values[key];
-                        break;
-                    case "Date":
-                        this.Date = (string)dictionary.Values[key];
-                        break;
-                    case "Genre":
-                        this.Genre = (string)dictionary.Values[key];
-                        break;
-                    case "Track":
-                        this.Track = (string)dictionary.Values[key];
-                        break;
-                    case "AlbumArtist":
-                        this.AlbumArtist = (string)dictionary.Values[key];
-                        break;
-                    case "Name":
-                        this.Name = (string)dictionary.Values[key];
-                        break;
-                    case "Disc":
-                        this.Disc = (string)dictionary.Values[key];
-                        break;
-                    case "Pos":
-                        this.Pos = Convert.ToInt32((string)dictionary.Values[key]);
-                        break;
-                    case "Id":
-                        this.Id = Convert.ToInt32((string)dictionary.Values[key]);
-                        break;
-                    case "Prio":
-                        this.Prio = Convert.ToInt32((string)dictionary.Values[key]);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (playlist != null)
-            {
-                foreach (SongTag st in playlist)
-                {
-                    if (st.file.Equals(this.file))
-                    {
-                        this.Pos = st.Pos;
-                        this.Id = st.Id;
-                    }
-                }
-            }
-
-            if (this.TagType == TagType.File && string.IsNullOrEmpty(this.Title))
-            {
-                string[] s = this.file.Split("/".ToCharArray());
-                if (s.Length > 0) this.Title = s.Last<string>();
-            }
-        }
-
-        public Dictionary<string, string> ToDictionary()
-        {
-            return new Dictionary<string, string>();
-        }
-
         public override string ToString()
         {
-            string songtagstring = string.Empty;
+            var songtagstring = string.Empty;
 
             if(!string.IsNullOrEmpty(this.file)) songtagstring = songtagstring + "file: " + this.file + "\n";
             if(!string.IsNullOrEmpty(this.directory)) songtagstring = songtagstring + "directory: " + this.directory + "\n";
@@ -712,7 +425,8 @@ namespace Chimney.MPD.Classes
             if(!string.IsNullOrEmpty(this.Track)) songtagstring = songtagstring + "Track: " + this.Track + "\n";
             if(!string.IsNullOrEmpty(this.AlbumArtist)) songtagstring = songtagstring + "AlbumArtist: " + this.AlbumArtist + "\n";
             if(!string.IsNullOrEmpty(this.Disc)) songtagstring = songtagstring + "Disc: " + this.Disc + "\n";
-            if(this.Pos > -1) songtagstring = songtagstring + "Pos: " + this.Pos + "\n";
+            if (!string.IsNullOrEmpty(this.Name)) songtagstring = songtagstring + "Name: " + this.Name + "\n";
+            if (this.Pos > -1) songtagstring = songtagstring + "Pos: " + this.Pos + "\n";
             if(this.Id > -1) songtagstring = songtagstring + "Id: " + this.Id + "\n";
             if(this.Prio > -1) songtagstring = songtagstring + "Prio: " + this.Prio + "\n";
 

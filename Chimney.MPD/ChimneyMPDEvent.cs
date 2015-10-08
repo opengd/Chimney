@@ -81,10 +81,12 @@ namespace Chimney.MPD
     public class OutputEventArgs : EventArgs
     {
         public List<Output> outputs;
+        public Status status;
 
-        public OutputEventArgs(List<Output> outputs)
+        public OutputEventArgs(List<Output> outputs, Status status)
         {
             this.outputs = outputs;
+            this.status = status;
         }
     }
 
@@ -214,7 +216,8 @@ namespace Chimney.MPD
                         if (OnMixer != null) OnMixer(this, new StatusEventArgs(status));
                         break;
                     case ("output"):
-                        if (OnOutput != null) OnOutput(this, new OutputEventArgs(await this.Outputs()));
+                        if (status == null) status = await this.GetStatus();
+                        if (OnOutput != null) OnOutput(this, new OutputEventArgs(await this.Outputs(), status));
                         break;
                     case ("options"):
                         if (status == null) status = await this.GetStatus();

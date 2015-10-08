@@ -266,7 +266,7 @@ namespace Chimney.MPD
 
         public Dictionary<int, ResponseConfig> ResponsConfigDictionary = new Dictionary<int, ResponseConfig>();
 
-        private string password = string.Empty;
+        private new string password = string.Empty;
 
         private bool password_confirmed = false;
 
